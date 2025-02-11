@@ -20,6 +20,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.python-version
 
 # Virtual Environment
 venv/
@@ -53,3 +54,9 @@ ENV/
 
 # Reference directory
 reference/ 
+
+
+# Data Cache
+logs/
+src/data/stock_news
+src/data/sentiment_cache.json
