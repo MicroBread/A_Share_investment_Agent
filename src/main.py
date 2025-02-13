@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import argparse
+import json
 from src.agents.valuation import valuation_agent
 from src.agents.state import AgentState
 from src.agents.sentiment import sentiment_agent
@@ -8,6 +9,7 @@ from src.agents.technicals import technical_analyst_agent
 from src.agents.portfolio_manager import portfolio_management_agent
 from src.agents.market_data import market_data_agent
 from src.agents.fundamentals import fundamentals_agent
+from src.tools.translator import translate_to_chinese
 from langgraph.graph import END, StateGraph
 from langchain_core.messages import HumanMessage
 import akshare as ak
@@ -122,8 +124,17 @@ if __name__ == "__main__":
         show_reasoning=args.show_reasoning,
         num_of_news=args.num_of_news
     )
-    print("\nFinal Result:")
-    print(result)
+    print(f"\nFinal Result:{result}")
+    
+    # 翻译并输出结论
+    try:
+        if result is not None:
+            result_json = json.loads(result.replace("```json", "").replace("```", ""))
+            print(f"\n最终建议: {translate_to_chinese(result_json['reasoning'])}")
+        else :
+            print(f"\nFinal Suggestion: None")
+    except Exception as e:
+        print(f"Error: {str(e)}")
 
 
 def get_historical_data(symbol: str) -> pd.DataFrame:
